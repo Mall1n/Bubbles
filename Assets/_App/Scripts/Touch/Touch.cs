@@ -74,7 +74,6 @@ namespace Bubbles
                 ITouchable touchable = hit.collider.GetComponent<ITouchable>();
                 if (touchable != null)
                 {
-                    // Debug.Log($"Touched: {hit.collider.name}, Position: {hit.collider.transform.position}");
                     bool onTouched = touchable.OnTouch();
                     if (onTouched) return true;
                 }

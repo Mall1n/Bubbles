@@ -161,9 +161,9 @@ namespace Bubbles
 
             Transform bubbleTransform = bubblePrefab.transform;
 
-            bubbleTransform.localPosition = new Vector3(randomPosition.x, randomPosition.y, UnityEngine.Random.Range(-1.5f, 1.5f));
+            bubbleTransform.position = new Vector3(randomPosition.x, randomPosition.y, UnityEngine.Random.Range(-1.5f, 1.5f));
             bubbleTransform.LookAt(this.transform);
-            bubbleTransform.localPosition = new Vector3(bubbleTransform.localPosition.x, bubbleTransform.localPosition.y, UnityEngine.Random.Range(-1.5f, 1.5f) + bubbleTransform.localPosition.z);
+            bubbleTransform.position = new Vector3(bubbleTransform.position.x, bubbleTransform.position.y, UnityEngine.Random.Range(-1.5f, 1.5f) + bubbleTransform.position.z);
             Vector3 bubbleEuler = bubbleTransform.localEulerAngles;
             bubbleTransform.localEulerAngles = new Vector3(bubbleEuler.x + UnityEngine.Random.Range(-28.0f, 28.0f), bubbleEuler.y, bubbleEuler.z);
 
@@ -174,10 +174,9 @@ namespace Bubbles
             _gameBubbles.Add(bubblePrefab);
         }
 
-        // Delay 2 frames. Иначе могут быть в начале ложные срабатывания на коллайдер
+        // Delay frame. Иначе могут быть в начале ложные срабатывания на коллайдер
         private IEnumerator ActivateNextFrame(BubbleHit bubble)
         {
-            yield return null;
             yield return null;
 
             if (bubble.isActiveAndEnabled)
