@@ -70,6 +70,7 @@ PlayerSettings:
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 1
   androidUseSwappy: 1
+  androidDisplayOptions: 1
   androidBlitType: 0
   androidResizeableActivity: 1
   androidDefaultWindowWidth: 1920
@@ -86,6 +87,7 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
+  audioSpatialExperience: 0
   deferSystemGesturesMode: 0
   hideHomeButton: 0
   submitAnalytics: 1
@@ -271,6 +273,9 @@ PlayerSettings:
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
+  androidAppCategory: 3
+  useAndroidAppCategory: 1
+  androidAppCategoryOther: 
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
@@ -376,6 +381,7 @@ PlayerSettings:
   - serializedVersion: 2
     m_BuildTarget: tvOS
     m_EncodingQuality: 1
+  m_BuildTargetGroupHDRCubemapEncodingQuality: []
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
   m_BuildTargetNormalMapEncoding:
@@ -655,19 +661,19 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: EXTOSC
-    EmbeddedLinux: EXTOSC
-    GameCoreXboxOne: EXTOSC
-    Nintendo Switch: EXTOSC
-    PS4: EXTOSC
-    PS5: EXTOSC
-    QNX: EXTOSC
-    ReservedCFE: EXTOSC
-    Standalone: EXTOSC
-    VisionOS: EXTOSC
-    WebGL: EXTOSC
-    XboxOne: EXTOSC
-    tvOS: EXTOSC
+    Android: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    EmbeddedLinux: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    GameCoreXboxOne: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    Nintendo Switch: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    PS4: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    PS5: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    QNX: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    ReservedCFE: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    Standalone: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    VisionOS: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    WebGL: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    XboxOne: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
+    tvOS: EXTOSC;UNITY_POST_PROCESSING_STACK_V2
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -765,7 +771,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
