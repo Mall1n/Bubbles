@@ -28,13 +28,15 @@ namespace Bubbles
         private void Awake()
         {
             ShowGameMenuInfo(false);
+
+            // Application.targetFrameRate = 120;
         }
 
         private void OnEnable()
         {
             gameStats.gameIsStarted += OnGameIsStarted;
             gameStats.scoreUpdate += OnScoreUpdate;
-            
+
             _gameMenuInfo.OnButtonStartNewGameClicked += StartGame;
 
             _bubbleController.bubbleOnPlayerTouched += BubbleDestroyShowEvent;

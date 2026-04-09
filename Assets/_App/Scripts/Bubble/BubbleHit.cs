@@ -59,6 +59,8 @@ namespace Bubbles
             _rb.AddRelativeForce(speed * transform.forward, ForceMode.Impulse);
             _score += (int)(speed * 10f);
 
+            _collider.enabled = true;
+
             StartCoroutine(ExplodeWithTime(_explodeDelayTime));
         }
 

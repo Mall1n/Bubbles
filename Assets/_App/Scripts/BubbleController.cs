@@ -15,7 +15,7 @@ namespace Bubbles
 
         [SerializeField][ReadOnly] private float _complicateIntensitySpawnBubbles;
         [SerializeField][ReadOnly] private float _chanceSpawnSpecialBubble = 10.0f;
-        [SerializeField][ReadOnly] private float _bubblesSpeedMidificatorGlobal = 1f;
+        [SerializeField][ReadOnly] private float _bubblesSpeedModificatorGlobal = 1f;
 
         [Header("--- Only for View ---")]
         [SerializeField] private List<BubbleHit> _gameBubbles = new();
@@ -76,7 +76,7 @@ namespace Bubbles
         {
             _chanceSpawnSpecialBubble = 10f;
             _complicateIntensitySpawnBubbles = 0f;
-            _bubblesSpeedMidificatorGlobal = 1f;
+            _bubblesSpeedModificatorGlobal = 1f;
 
             StopAllCoroutines();
             DestroyAllBubbles();
@@ -89,7 +89,7 @@ namespace Bubbles
         public void StopGame()
         {
             _complicateIntensitySpawnBubbles = -2f;
-            _bubblesSpeedMidificatorGlobal = 0.6f;
+            _bubblesSpeedModificatorGlobal = 0.6f;
 
             StopAllCoroutines();
 
@@ -106,6 +106,8 @@ namespace Bubbles
                 yield return new WaitForSeconds(timeDelay);
 
                 SpawnRandomBubble(touchable);
+
+                Physics.SyncTransforms();
             }
         }
 
@@ -161,31 +163,20 @@ namespace Bubbles
 
             Transform bubbleTransform = bubblePrefab.transform;
 
-            bubbleTransform.position = new Vector3(randomPosition.x, randomPosition.y, UnityEngine.Random.Range(-1.5f, 1.5f));
-            bubbleTransform.LookAt(this.transform);
-            bubbleTransform.position = new Vector3(bubbleTransform.position.x, bubbleTransform.position.y, UnityEngine.Random.Range(-1.5f, 1.5f) + bubbleTransform.position.z);
-            Vector3 bubbleEuler = bubbleTransform.localEulerAngles;
-            bubbleTransform.localEulerAngles = new Vector3(bubbleEuler.x + UnityEngine.Random.Range(-28.0f, 28.0f), bubbleEuler.y, bubbleEuler.z);
+            bubbleTransform.position = randomPosition; // z -> 0
+            bubbleTransform.LookAt(Vector3.zero);
+            bubbleTransform.Translate(new Vector3(0, 0, FRange(-1f, 1.5f)), Space.World);
+            bubbleTransform.Rotate(FRange(-25.0f, 25.0f), 0, 0);
 
-            bubblePrefab.LaunchBubble(_bubblesSpeedMidificatorGlobal);
-
-            StartCoroutine(ActivateNextFrame(bubblePrefab));
+            bubblePrefab.LaunchBubble(_bubblesSpeedModificatorGlobal);
 
             _gameBubbles.Add(bubblePrefab);
         }
 
-        // Delay frame. Иначе могут быть в начале ложные срабатывания на коллайдер
-        private IEnumerator ActivateNextFrame(BubbleHit bubble)
-        {
-            yield return null;
-
-            if (bubble.isActiveAndEnabled)
-                bubble.Collider.enabled = true;
-        }
+        private static float FRange(float min, float max) => UnityEngine.Random.Range(min, max);
 
         private void OnBubbleSpawnParticle(BubbleHit bubble)
         {
-            print(bubble.transform.position);
             SpawnParticleBubbles(bubble);
         }
 
