@@ -847,7 +847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minRadius: 6
   _maxRadius: 9
-  _timeSpawnBubble: {x: 2.5, y: 4.5}
+  _timeSpawnBubble: {x: 2.5, y: 4}
   objectsPoolManager: {fileID: 1156132877}
   _complicateIntensitySpawnBubbles: 0
   _chanceSpawnSpecialBubble: 10
@@ -1835,7 +1835,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4656497504071127401, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 280.79
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4656497504071127401, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2031,7 +2031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8387395626357852029, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 280.79
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8387395626357852029, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.y

@@ -103,6 +103,7 @@ namespace Bubbles
             while (true)
             {
                 float timeDelay = UnityEngine.Random.Range(_timeSpawnBubble.x - _complicateIntensitySpawnBubbles, _timeSpawnBubble.y - _complicateIntensitySpawnBubbles);
+                timeDelay = Mathf.Max(0.1f, timeDelay);
                 yield return new WaitForSeconds(timeDelay);
 
                 SpawnRandomBubble(touchable);

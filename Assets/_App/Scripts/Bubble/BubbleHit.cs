@@ -40,6 +40,9 @@ namespace Bubbles
         protected virtual void OnDisable()
         {
             StopAllCoroutines();
+
+            _rb.angularVelocity = Vector3.zero;
+            _rb.linearVelocity = Vector3.zero;
         }
 
         public override void OnCreated()
@@ -56,7 +59,7 @@ namespace Bubbles
         {
             float speed = UnityEngine.Random.Range(_speedMin, _speedMax);
             speed *= speedModificator;
-            _rb.AddRelativeForce(speed * transform.forward, ForceMode.Impulse);
+            _rb.AddForce(transform.forward * speed, ForceMode.Impulse);
             _score += (int)(speed * 10f);
 
             _collider.enabled = true;
