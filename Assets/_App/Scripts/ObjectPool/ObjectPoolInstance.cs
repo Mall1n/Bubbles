@@ -5,7 +5,7 @@ namespace Bubbles
 {
     public interface IPoolInstance
     {
-        bool ContainsPrefab(object prefab);
+        bool ContainsPrefab(IPoolable prefab);
 
         Component GetComponent();
     }
@@ -34,9 +34,11 @@ namespace Bubbles
 
         private void HandleObjectDisabled(T obj) => objDisabled?.Invoke(obj);
 
-        public bool ContainsPrefab(object prefab)
+        public bool ContainsPrefab(IPoolable prefab)
         {
-            return _poolObjets.Contains(prefab as T);
+            if (prefab is T poolable)
+                return _poolObjets.Contains(poolable);
+            else return false;
         }
 
         public T Get()

@@ -3,7 +3,12 @@ using UnityEngine;
 
 namespace Bubbles
 {
-    public interface IPoolable<T> where T : Component
+    public interface IPoolable
+    {
+        
+    }
+    
+    public interface IPoolable<T> : IPoolable where T : Component
     {
         event Action<T> disabled;
         
