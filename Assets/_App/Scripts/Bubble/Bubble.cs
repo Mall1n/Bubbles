@@ -1,12 +1,11 @@
 
-using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Bubbles
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class Bubble<T> : MonoBehaviour, IPoolable<T> where T : Component
+    public abstract class Bubble : Poolable
     {
         [Header("Speed")]
         [SerializeField] protected float _speedMin = 1.5f;
@@ -15,8 +14,6 @@ namespace Bubbles
         protected readonly float _explodeDelayTime = 20.0f;
 
         protected Rigidbody _rb;
-
-        public event Action<T> disabled;
 
         protected virtual void Awake()
         {
@@ -37,22 +34,22 @@ namespace Bubbles
             Disable();
         }
 
-        public virtual void Enable()
+        public override void Enable()
         {
             if (!this.gameObject.activeSelf)
                 this.gameObject.SetActive(true);
         }
 
-        public virtual void Disable()
+        public override void Disable()
         {
-            if (this is T instance)
+            if (this.gameObject.activeSelf)
             {
-                disabled?.Invoke(instance);
+                this.gameObject.SetActive(false);
+                
+                InvokeDisabled(this);
             }
-
-            this.gameObject.SetActive(false);
         }
 
-        public virtual void OnCreated() { }
+        public override void OnCreated() { }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Bubbles
 {
     [RequireComponent(typeof(SphereCollider))]
-    public class BubbleHit : Bubble<BubbleHit>, ITouchable
+    public class BubbleHit : Bubble
     {
         [Header("Score")]
         [SerializeField] protected int _score = 10;

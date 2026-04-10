@@ -200,7 +200,7 @@ namespace Bubbles
             if (bubbleParticle == null)
                 return;
 
-            IPoolInstance poolInstance = objectsPoolManager.ContainsPrefab<BubbleParticle>(bubbleParticle);
+            IPoolInstance poolInstance = objectsPoolManager.ContainsPrefab(bubbleParticle);
             BubbleParticle particle;
 
             if (poolInstance != null)

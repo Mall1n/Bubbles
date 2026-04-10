@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Bubbles
 {
-    public class BubbleParticle : Bubble<BubbleParticle>
+    public class BubbleParticle : Bubble
     {
         protected new readonly float _explodeDelayTime = 3.0f;
 

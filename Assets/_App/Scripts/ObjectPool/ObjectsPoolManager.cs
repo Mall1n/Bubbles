@@ -48,7 +48,7 @@ namespace Bubbles
 
         private void OnBubbleDisabled(BubbleHit bubble) => bubbleDisabled?.Invoke(bubble);
 
-        public IPoolInstance ContainsPrefab<T>(T prefab) where T : Component, IPoolable<T> 
+        public IPoolInstance ContainsPrefab(Poolable prefab) 
         {
             if (_poolBubbles.ContainsPrefab(prefab as BubbleHit)) return _poolBubbles;
             if (_poolParticles.ContainsPrefab(prefab as BubbleParticle)) return _poolParticles;

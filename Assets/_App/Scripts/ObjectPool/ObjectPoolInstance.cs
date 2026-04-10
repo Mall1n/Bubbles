@@ -5,13 +5,13 @@ namespace Bubbles
 {
     public interface IPoolInstance
     {
-        bool ContainsPrefab(object prefab);
+        bool ContainsPrefab(Poolable prefab);
 
         Component GetComponent();
     }
 
     [Serializable]
-    public class ObjectPoolInstance<T> : IPoolInstance, IDisposable where T : Component, IPoolable<T>
+    public class ObjectPoolInstance<T> : IPoolInstance, IDisposable where T : Poolable
     {
         [SerializeField] private ObjectPoolSettings _poolSettings;
         [SerializeField] private ObjectPool<T> _poolObjets;
@@ -34,7 +34,7 @@ namespace Bubbles
 
         private void HandleObjectDisabled(T obj) => objDisabled?.Invoke(obj);
 
-        public bool ContainsPrefab(object prefab)
+        public bool ContainsPrefab(Poolable prefab)
         {
             return _poolObjets.Contains(prefab as T);
         }

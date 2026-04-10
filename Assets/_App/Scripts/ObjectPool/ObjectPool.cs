@@ -12,7 +12,7 @@ namespace Bubbles
         public Transform container;
     }
 
-    public class ObjectPool<T> : IDisposable where T : Component, IPoolable<T>
+    public class ObjectPool<T> : IDisposable where T : Poolable
     {
         private readonly string name;
         private readonly T[] _prefabs;
@@ -77,7 +77,7 @@ namespace Bubbles
         private void CreateNewObject(T prefab)
         {
             T obj = UnityEngine.Object.Instantiate(prefab, _container);
-            obj.gameObject.SetActive(false); 
+            obj.gameObject.SetActive(false);
 
             obj.disabled += OnObjDisabled;
 
@@ -86,15 +86,16 @@ namespace Bubbles
             obj.OnCreated();
         }
 
-        private void OnObjDisabled(T poolable)
+        private void OnObjDisabled(Poolable poolable)
         {
-            if (_activeSet.Remove(poolable))
-            {
-                _activeObjects.Remove(poolable);
-                _inactivePool.Enqueue(poolable);
+            if (poolable is T p)
+                if (_activeSet.Remove(p))
+                {
+                    _activeObjects.Remove(p);
+                    _inactivePool.Enqueue(p);
 
-                objDisabled?.Invoke(poolable);
-            }
+                    objDisabled?.Invoke(p);
+                }
         }
 
         public T Get()
@@ -107,7 +108,7 @@ namespace Bubbles
             if (_inactivePool.Count > 0)
             {
                 T obj = _inactivePool.Dequeue();
-                
+
                 _activeObjects.Add(obj);
                 _activeSet.Add(obj);
 
