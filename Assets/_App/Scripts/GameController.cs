@@ -29,7 +29,9 @@ namespace Bubbles
         {
             ShowGameMenuInfo(false);
 
-            // Application.targetFrameRate = 120;
+#if UNITY_EDITOR
+            Application.targetFrameRate = 60;
+#endif
         }
 
         private void OnEnable()

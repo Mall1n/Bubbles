@@ -10,7 +10,7 @@ namespace Bubbles
         [Header("Spawn Bubble Settings")]
         [SerializeField] private float _minRadius = 5f;
         [SerializeField] private float _maxRadius = 8f;
-        [SerializeField] private Vector2 _timeSpawnBubble = new(2.5f, 4.5f);
+        [SerializeField] private Vector2 _timeSpawnBubbleOrigin = new(1.5f, 4f);
         [SerializeField] private ObjectsPoolManager objectsPoolManager;
 
         [SerializeField][ReadOnly] private float _complicateIntensitySpawnBubbles;
@@ -60,9 +60,20 @@ namespace Bubbles
             _gameBubbles.Remove(bubble);
         }
 
+        private void SpawnRandomBubbles(bool touchable)
+        {
+            SpawnRandomBubble(touchable);
+
+            // double bubble
+            if (FRange() < _chanceSpawnSpecialBubble)
+            {
+                SpawnRandomBubble(touchable);
+            }
+        }
+
         private void SpawnRandomBubble(bool touchable)
         {
-            if (UnityEngine.Random.Range(0.0f, 100.0f) <= _chanceSpawnSpecialBubble)
+            if (FRange() <= _chanceSpawnSpecialBubble)
             {
                 SpawnBubbleSpecial(touchable);
             }
@@ -102,17 +113,26 @@ namespace Bubbles
         {
             while (true)
             {
-                float timeDelay = UnityEngine.Random.Range(_timeSpawnBubble.x - _complicateIntensitySpawnBubbles, _timeSpawnBubble.y - _complicateIntensitySpawnBubbles);
-                timeDelay = Mathf.Max(0.1f, timeDelay);
+                float timeDelay = GetRandomTimeDelaySpawnBubble();
+
                 yield return new WaitForSeconds(timeDelay);
 
-                SpawnRandomBubble(touchable);
+                SpawnRandomBubbles(touchable);
 
                 Physics.SyncTransforms();
             }
         }
 
-        private const float _complicateIntensitySpawnBubblesMax = 1.5f;
+        [SerializeField][ReadOnly] private Vector2 actualTimeSpawnBubble;
+
+        private float GetRandomTimeDelaySpawnBubble()
+        {
+            actualTimeSpawnBubble = new Vector2(
+                Mathf.Max(0.25f, _timeSpawnBubbleOrigin.x - _complicateIntensitySpawnBubbles),
+                Mathf.Max(0.5f, _timeSpawnBubbleOrigin.y - _complicateIntensitySpawnBubbles)
+            );
+            return FRange(actualTimeSpawnBubble.x, actualTimeSpawnBubble.y);
+        }
 
         private IEnumerator ComplicateIntensitySpawnBubbles()
         {
@@ -121,11 +141,6 @@ namespace Bubbles
                 yield return new WaitForSeconds(1);
 
                 _complicateIntensitySpawnBubbles += 0.01f;
-                if (_complicateIntensitySpawnBubbles > _complicateIntensitySpawnBubblesMax)
-                {
-                    _complicateIntensitySpawnBubbles = _complicateIntensitySpawnBubblesMax;
-                    yield break;
-                }
             }
         }
 
@@ -174,8 +189,6 @@ namespace Bubbles
             _gameBubbles.Add(bubblePrefab);
         }
 
-        private static float FRange(float min, float max) => UnityEngine.Random.Range(min, max);
-
         private void OnBubbleSpawnParticle(BubbleHit bubble)
         {
             SpawnParticleBubbles(bubble);
@@ -192,7 +205,7 @@ namespace Bubbles
 
             if (poolInstance != null)
             {
-                int amountBubbleParticles = UnityEngine.Random.Range(15, 30);
+                int amountBubbleParticles = FRange(15, 30);
 
                 for (int i = 0; i < amountBubbleParticles; i++)
                 {
@@ -230,10 +243,14 @@ namespace Bubbles
         {
             Vector2 randomDirection = UnityEngine.Random.insideUnitCircle.normalized;
 
-            float randomRadius = Mathf.Sqrt(UnityEngine.Random.Range(_minRadius * _minRadius, _maxRadius * _maxRadius));
+            float randomRadius = Mathf.Sqrt(FRange(_minRadius * _minRadius, _maxRadius * _maxRadius));
 
             return randomDirection * randomRadius;
         }
+
+        private static float FRange(float min, float max) => UnityEngine.Random.Range(min, max);
+        private static int FRange(int min, int max) => UnityEngine.Random.Range(min, max);
+        private static float FRange() => UnityEngine.Random.Range(0f, 100f);
 
         // private void OnDrawGizmosSelected()
         // {

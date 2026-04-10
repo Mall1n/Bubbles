@@ -847,12 +847,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minRadius: 6
   _maxRadius: 9
-  _timeSpawnBubble: {x: 2.5, y: 4}
+  _timeSpawnBubbleOrigin: {x: 1.5, y: 4}
   objectsPoolManager: {fileID: 1156132877}
   _complicateIntensitySpawnBubbles: 0
   _chanceSpawnSpecialBubble: 10
   _bubblesSpeedModificatorGlobal: 1
   _gameBubbles: []
+  actualTimeSpawnBubble: {x: 0, y: 0}
 --- !u!1001 &1148650883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -965,19 +966,23 @@ MonoBehaviour:
   _bubblesPoolConfig: {fileID: 11400000, guid: fbddfdac22cafef40a4b761d789de1ad, type: 2}
   _poolBubbles:
     _poolSettings:
-      initialCount: 30
+      name: PoolBubbles
+      initialCount: 40
       container: {fileID: 321076751}
   _poolParticles:
     _poolSettings:
+      name: PoolBubblesParticles
       initialCount: 1000
       container: {fileID: 1864956835}
   _poolBubblesFast:
     _poolSettings:
-      initialCount: 30
+      name: PoolBubblesFast
+      initialCount: 10
       container: {fileID: 1892328789}
   _poolParticlesFast:
     _poolSettings:
-      initialCount: 500
+      name: PoolBubblesParticlesFast
+      initialCount: 250
       container: {fileID: 1241373696}
 --- !u!1 &1241373695
 GameObject:
@@ -1835,7 +1840,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4656497504071127401, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 280.79
       objectReference: {fileID: 0}
     - target: {fileID: 4656497504071127401, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2031,7 +2036,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8387395626357852029, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 280.79
       objectReference: {fileID: 0}
     - target: {fileID: 8387395626357852029, guid: 6aaaabeca32367d4aa44652c63212ef0, type: 3}
       propertyPath: m_SizeDelta.y

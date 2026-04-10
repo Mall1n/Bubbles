@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Bubbles
@@ -8,16 +7,21 @@ namespace Bubbles
     [Serializable]
     public class ObjectPoolSettings
     {
+        public string name;
         public int initialCount;
         public Transform container;
     }
 
     public class ObjectPool<T> : IDisposable where T : Component, IPoolable<T>
     {
+        private readonly string name;
         private readonly T[] _prefabs;
         private readonly Queue<T> _inactivePool;
         private readonly List<T> _activeObjects;
         private readonly Transform _container;
+
+        private readonly HashSet<T> _prefabSet;
+        private readonly HashSet<T> _activeSet;
 
         public int InactiveCount => _inactivePool.Count;
         public int ActiveCount => _activeObjects.Count;
@@ -30,20 +34,24 @@ namespace Bubbles
 
         public ObjectPool(T[] prefabs, ObjectPoolSettings settings)
         {
+            name = settings.name;
+
             if (prefabs == null || prefabs.Length == 0)
             {
-                Debug.LogError($"[ObjectPool<{typeof(T).Name}>] Список префабов пуст!");
+                Debug.LogError($"[ObjectPool<{typeof(T).Name}>.{settings.name}] Prefabs list is empty!");
                 return;
             }
 
             _prefabs = prefabs;
+            _prefabSet = new HashSet<T>(prefabs);
+            _activeSet = new();
             _container = settings.container;
             _inactivePool = new Queue<T>(settings.initialCount);
             _activeObjects = new List<T>(settings.initialCount);
 
             for (int i = 0; i < settings.initialCount; i++)
             {
-                // Выбираем префаб по кругу: 0, 1, 2, 0, 1, 2...
+                // Choosing a prefab in a circle: 0, 1, 2, 0, 1, 2...
                 T targetPrefab = _prefabs[i % _prefabs.Length];
                 CreateNewObject(targetPrefab);
             }
@@ -63,13 +71,13 @@ namespace Bubbles
 
         public bool Contains(T prefab)
         {
-            return _prefabs.Contains(prefab);
+            return _prefabSet.Contains(prefab);
         }
 
         private void CreateNewObject(T prefab)
         {
             T obj = UnityEngine.Object.Instantiate(prefab, _container);
-            obj.gameObject.SetActive(false);
+            obj.gameObject.SetActive(false); 
 
             obj.disabled += OnObjDisabled;
 
@@ -80,45 +88,50 @@ namespace Bubbles
 
         private void OnObjDisabled(T poolable)
         {
-            if (_activeObjects.Contains(poolable))
+            if (_activeSet.Remove(poolable))
             {
                 _activeObjects.Remove(poolable);
                 _inactivePool.Enqueue(poolable);
+
                 objDisabled?.Invoke(poolable);
             }
         }
 
         public T Get()
         {
+            if (_inactivePool.Count == 0)
+            {
+                ExpandPool();
+            }
+
             if (_inactivePool.Count > 0)
             {
                 T obj = _inactivePool.Dequeue();
-                obj.Enable();
+                
                 _activeObjects.Add(obj);
+                _activeSet.Add(obj);
+
+                obj.Enable();
+
                 return obj;
             }
 
-            Debug.Log($"[ObjectPool<{typeof(T).Name}>] Создан новый объект (достигнут лимит пула)");
+            Debug.LogWarning($"[ObjectPool<{typeof(T).Name}>.{name}] Critical! Cannot get an object from the pool!");
+            return null;
+        }
+
+        private void ExpandPool()
+        {
+            Debug.Log($"[ObjectPool<{typeof(T).Name}>.{name}] Expanding pool");
             T targetPrefab = _prefabs[TotalCount % _prefabs.Length];
             CreateNewObject(targetPrefab);
-
-            if (_inactivePool.Count > 0)
-            {
-                T obj = _inactivePool.Dequeue();
-                obj.Enable();
-                _activeObjects.Add(obj);
-                return obj;
-            }
-
-            Debug.LogWarning($"[ObjectPool<{typeof(T).Name}>] Не удалось расширить пул!");
-            return null;
         }
 
         public void DisableAll()
         {
-            foreach (T obj in _activeObjects.ToList())
+            for (int i = _activeObjects.Count - 1; i >= 0; i--)
             {
-                obj.Disable();
+                _activeObjects[i].Disable();
             }
         }
     }
